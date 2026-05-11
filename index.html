@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Stopwatch Web Application</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+
+    body{
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      background: linear-gradient(135deg,#f6d365,#fda085,#f5576c);
+    }
+
+    .container{
+
+      background:white;
+      padding:35px;
+      border-radius:15px;
+      text-align:center;
+
+      box-shadow:0 5px 20px rgba(0,0,0,0.3);
+
+      width:350px;
+    }
+
+    h1{
+      margin-bottom:20px;
+      color:#333;
+    }
+
+    .time{
+
+      font-size:45px;
+      font-weight:bold;
+      margin-bottom:25px;
+
+      color:#111;
+    }
+
+    .buttons button{
+
+      padding:12px 18px;
+      margin:5px;
+
+      border:none;
+      border-radius:8px;
+
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+
+      transition:0.3s;
+    }
+
+    .buttons button:hover{
+      transform:scale(1.05);
+    }
+
+    .start{
+      background:#28a745;
+    }
+
+    .pause{
+      background:#ffc107;
+      color:black;
+    }
+
+    .reset{
+      background:#dc3545;
+    }
+
+    .lap{
+      background:#007bff;
+    }
+
+    #laps{
+
+      margin-top:20px;
+      max-height:150px;
+      overflow-y:auto;
+
+      text-align:left;
+    }
+
+    #laps li{
+
+      background:#f4f4f4;
+      padding:10px;
+      margin-bottom:8px;
+
+      border-radius:5px;
+      list-style:none;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>Stopwatch</h1>
+
+    <div class="time" id="display">
+      00:00:00
+    </div>
+
+    <div class="buttons">
+
+      <button class="start" onclick="startStopwatch()">
+        Start
+      </button>
+
+      <button class="pause" onclick="pauseStopwatch()">
+        Pause
+      </button>
+
+      <button class="reset" onclick="resetStopwatch()">
+        Reset
+      </button>
+
+      <button class="lap" onclick="lapTime()">
+        Lap
+      </button>
+
+    </div>
+
+    <ul id="laps"></ul>
+
+  </div>
+
+  <script>
+
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    let timer = null;
+
+    function updateDisplay(){
+
+      let h = hours < 10 ? "0" + hours : hours;
+      let m = minutes < 10 ? "0" + minutes : minutes;
+      let s = seconds < 10 ? "0" + seconds : seconds;
+
+      document.getElementById("display").innerText =
+      `${h}:${m}:${s}`;
+    }
+
+    function stopwatch(){
+
+      seconds++;
+
+      if(seconds == 60){
+
+        seconds = 0;
+        minutes++;
+      }
+
+      if(minutes == 60){
+
+        minutes = 0;
+        hours++;
+      }
+
+      updateDisplay();
+    }
+
+    function startStopwatch(){
+
+      if(timer !== null){
+        clearInterval(timer);
+      }
+
+      timer = setInterval(stopwatch,1000);
+    }
+
+    function pauseStopwatch(){
+
+      clearInterval(timer);
+    }
+
+    function resetStopwatch(){
+
+      clearInterval(timer);
+
+      seconds = 0;
+      minutes = 0;
+      hours = 0;
+
+      updateDisplay();
+
+      document.getElementById("laps").innerHTML = "";
+    }
+
+    function lapTime(){
+
+      let lap = document.createElement("li");
+
+      lap.innerText =
+      document.getElementById("display").innerText;
+
+      document.getElementById("laps").appendChild(lap);
+    }
+
+  </script>
+
+</body>
+</html>
